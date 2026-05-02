@@ -24,7 +24,7 @@ vectorstore = FAISS.from_documents(chunks, embeddings)
 
 # 5. Query loop
 while True:
-    query = input("\nAsk something: ")
+    query = input("\nAsk something about document: ")
 
     # Retrieve
     docs = vectorstore.similarity_search(query, k=5)
@@ -48,7 +48,7 @@ while True:
     docs = filtered_docs
 
     # ✅ Print retrieved chunks (ONLY LOOP HERE)
-    print("\n--- Retrieved Chunks ---")
+    print("\n----- Retrieved Chunks -----")
     for i, doc in enumerate(docs):
         print(f"\nChunk {i+1}:\n{doc.page_content[:300]}")
 
@@ -56,5 +56,5 @@ while True:
     final_text = "\n\n".join([doc.page_content for doc in docs])
 
     # ✅ Print answer ONCE
-    print("\n--- Answer ---")
+    print("\n----- Answer -----")
     print(final_text[:700])
