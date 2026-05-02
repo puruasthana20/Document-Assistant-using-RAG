@@ -6,7 +6,7 @@ UPLOAD_URL = "http://127.0.0.1:8000/upload"
 
 st.set_page_config(page_title="RAG Assistant", layout="wide")
 
-st.title("🧠 RAG Chat Assistant")
+st.title(" RAG Chat Assistant")
 
 # ---------------- SESSION STATE ----------------
 if "messages" not in st.session_state:
@@ -87,7 +87,7 @@ if user_input:
             answer = f"Error: {e}"
             sources = []
 
-    with st.chat_message("assistant"):
+    with st.chat_message("Asistant"):
         st.write(answer[:1000] + "..." if len(answer) > 1000 else answer)
 
         if sources:
