@@ -1,16 +1,20 @@
-﻿# Virtual Environment
+﻿# Virtual environment
 .venv/
 
-# Environment Variables
+# Environment variables
 .env
 
-# Python Cache
+# Python cache
 __pycache__/
 *.pyc
 
-# Uploaded/Test Documents
+# User uploaded PDFs
 data/
 
-# OS Files
+# IDE files
+.vscode/
+.idea/
+
+# OS files
 .DS_Store
 Thumbs.db
