@@ -4,7 +4,6 @@ from src.embeddings import get_embeddings
 from src.vectorstore import create_vectorstore
 from src.retriever import get_retriever
 from src.generator import get_llm
-from src.reranker import rerank
 
 retriever = None
 llm = get_llm()
@@ -25,8 +24,8 @@ def run_rag(query: str, mode="normal"):
         return {"answer": "Please upload a document first.", "sources": []}
 
     docs = retriever.invoke(query)
-    docs = docs[:15]
-    docs = rerank(query, docs, top_k=3)
+
+    docs = docs[:4]
 
     context = "\n".join([doc.page_content for doc in docs])
 
