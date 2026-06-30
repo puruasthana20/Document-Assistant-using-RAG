@@ -1,7 +1,20 @@
-from langchain_ollama import OllamaLLM
+import os
+
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv()
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel("gemini-2.5-flash")
+
+
+class GeminiLLM:
+    def invoke(self, prompt):
+        response = model.generate_content(prompt)
+        return response.text
+
 
 def get_llm():
-    return OllamaLLM(
-        model="phi3",
-        temperature=0
-    )
+    return GeminiLLM()
