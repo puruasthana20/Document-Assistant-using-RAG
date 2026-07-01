@@ -1,6 +1,20 @@
-from langchain_huggingface import HuggingFaceEmbeddings
+import os
+from google import genai
+from dotenv import load_dotenv
 
-def get_embeddings():
-    return HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2"
-    )
+load_dotenv()
+
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
+def get_embeddings(texts):
+    embeddings = []
+
+    for text in texts:
+        response = client.models.embed_content(
+            model="gemini-embedding-001",
+            contents=text
+        )
+
+        embeddings.append(response.embeddings[0].values)
+
+    return embeddings
