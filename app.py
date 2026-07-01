@@ -6,7 +6,7 @@ UPLOAD_URL = "http://127.0.0.1:8000/upload"
 
 st.set_page_config(page_title="RAG Assistant", layout="wide")
 
-st.title(" RAG Chat Assistant")
+st.title("🧠 RAG Chat Assistant")
 
 # ---------------- SESSION STATE ----------------
 if "messages" not in st.session_state:
@@ -33,7 +33,7 @@ if uploaded_file and not st.session_state.file_uploaded:
                 st.session_state.messages = []
                 st.success(f"✅ Uploaded: {uploaded_file.name}")
             else:
-                st.error("❌ Upload failed")
+                st.error(f"❌ Upload failed: {response.text}")
 
         except Exception as e:
             st.error(f"Error: {e}")
@@ -62,38 +62,36 @@ for msg in st.session_state.messages:
 # ---------------- INPUT CONTROL ----------------
 if not st.session_state.file_uploaded:
     st.info("📂 Please upload a document to start chatting.")
-    user_input = None
 else:
     user_input = st.chat_input("Ask something...")
 
-# ---------------- CHAT LOGIC ----------------
-if user_input:
-    st.chat_message("user").write(user_input)
-    st.session_state.messages.append({"role": "user", "content": user_input})
+    if user_input:
+        st.chat_message("user").write(user_input)
+        st.session_state.messages.append({"role": "user", "content": user_input})
 
-    with st.spinner("Thinking..."):
-        try:
+        with st.spinner("Thinking..."):
             response = requests.post(API_URL, json={
                 "question": user_input,
                 "mode": mode
             })
 
+            print("Status Code:", response.status_code)
+            print("Response Text:", response.text)
+
             result = response.json()
 
-            answer = result.get("answer", "No answer")
-            sources = result.get("sources", [])
+        answer = result.get("answer", "No answer")
+        sources = result.get("sources", [])
 
-        except Exception as e:
-            answer = f"Error: {e}"
-            sources = []
+        with st.chat_message("assistant"):
+            st.write(answer)
 
-    with st.chat_message("Asistant"):
-        st.write(answer[:1000] + "..." if len(answer) > 1000 else answer)
+            if sources:
+                with st.expander("📄 Sources"):
+                    for i, src in enumerate(sources):
+                        st.markdown(f"**Source {i+1}:**")
+                        st.write(src[:400] + "...")
 
-        if sources:
-            with st.expander("📄 Sources"):
-                for i, src in enumerate(sources):
-                    st.markdown(f"**Source {i+1}:**")
-                    st.write(src[:400] + "...")
-
-    st.session_state.messages.append({"role": "assistant", "content": answer})
+        st.session_state.messages.append(
+            {"role": "assistant", "content": answer}
+        )
