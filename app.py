@@ -1,8 +1,14 @@
+import os
 import streamlit as st
 import requests
 
-API_URL = "http://127.0.0.1:8000/query"
-UPLOAD_URL = "http://127.0.0.1:8000/upload"
+BACKEND_URL = os.getenv(
+    "BACKEND_URL",
+    "http://127.0.0.1:8000"
+)
+
+API_URL = f"{BACKEND_URL}/query"
+UPLOAD_URL = f"{BACKEND_URL}/upload"
 
 st.set_page_config(page_title="RAG Assistant", layout="wide")
 
